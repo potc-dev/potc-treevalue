@@ -30,7 +30,74 @@ pip install potc-treevalue
 
 ## Quick Start
 
-(Need to be completed.)
+After `potc-treevalue` is installed, you can convert the `treevalue` objects into executable source code without any additional operations.
+
+We can create a python script which is named `test_simple.py`
+
+```python
+from potc import transvars
+from treevalue import FastTreeValue, raw
+
+from potc_treevalue.plugin import __rules__
+
+r = raw({'a': 1, 'b': 2, 'c': [3, 4]})
+t = FastTreeValue({
+    'a': 1, 'b': 'this is a string',
+    'c': [], 'd': {
+        'x': raw({'a': 1, 'b': (None, Ellipsis)}),
+        'y': {3, 4, 5}
+    }
+})
+st = t._detach()
+if __name__ == '__main__':
+    _code = transvars(
+        {'t': t, 'st': t._detach(), 'r': r},
+        trans=[__rules__],
+        reformat='pep8'
+    )
+    print(_code)
+
+```
+
+The output result should be like this
+
+```
+from treevalue import FastTreeValue, raw
+from treevalue.tree.common import create_storage
+
+__all__ = ['r', 'st', 't']
+r = raw({'a': 1, 'b': 2, 'c': [3, 4]})
+st = create_storage({
+    'a': 1,
+    'b': 'this is a string',
+    'c': [],
+    'd': {
+        'x': raw({
+            'a': 1,
+            'b': (None, ...)
+        }),
+        'y': {3, 4, 5}
+    }
+})
+t = FastTreeValue({
+    'a': 1,
+    'b': 'this is a string',
+    'c': [],
+    'd': {
+        'x': raw({
+            'a': 1,
+            'b': (None, ...)
+        }),
+        'y': {3, 4, 5}
+    }
+})
+```
+
+And, you can use the following CLI command to get the same output results as above.
+
+```shell
+potc export -v 'test_simple.t' -v 'test_simple.st' -v 'test_simple.r'
+```
 
 
 # Contributing
