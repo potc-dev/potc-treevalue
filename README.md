@@ -38,8 +38,6 @@ We can create a python script which is named `test_simple.py`
 from potc import transvars
 from treevalue import FastTreeValue, raw
 
-from potc_treevalue.plugin import __rules__
-
 r = raw({'a': 1, 'b': 2, 'c': [3, 4]})
 t = FastTreeValue({
     'a': 1, 'b': 'this is a string',
@@ -52,7 +50,6 @@ st = t._detach()
 if __name__ == '__main__':
     _code = transvars(
         {'t': t, 'st': t._detach(), 'r': r},
-        trans=[__rules__],
         reformat='pep8'
     )
     print(_code)
