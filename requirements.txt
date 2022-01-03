@@ -1,2 +1,2 @@
-potc>=0.0.2
+potc>=0.0.3
 treevalue>=1.0.0
